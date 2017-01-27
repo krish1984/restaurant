@@ -42,17 +42,22 @@ public class MenuServiceImpl implements MenuService{
 			fr = new FileReader(dataFile.getFile());
 			br = new BufferedReader(fr);
 			String line = br.readLine();
+			int count=0;
 			while(line!=null){
-				String[] parts = line.split("\\s+");
-				Integer itemSatisfaction = null;
-				Integer timeToEatItem = null;
-				try{
-					itemSatisfaction = Integer.parseInt(parts[0]);
-					timeToEatItem = Integer.parseInt(parts[1]);
-					satisfactionsToTimesMap.put(itemSatisfaction, timeToEatItem);
-				}catch(NumberFormatException e){
-					logger.error(e.getMessage(),e);
+				//ignore the 1st record as it represents the given time but not an actual item.
+				if(count!=0){
+					String[] parts = line.split("\\s+");
+					Integer itemSatisfaction = null;
+					Integer timeToEatItem = null;
+					try{
+						itemSatisfaction = Integer.parseInt(parts[0]);
+						timeToEatItem = Integer.parseInt(parts[1]);
+						satisfactionsToTimesMap.put(itemSatisfaction, timeToEatItem);
+					}catch(NumberFormatException e){
+						logger.error(e.getMessage(),e);
+					}
 				}
+				++count;
 				line=br.readLine();
 			}
 			
